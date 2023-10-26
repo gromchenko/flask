@@ -1,0 +1,14 @@
+{% extends 'main.html' %}
+{% block title %}
+Главная страница
+{% endblock %}
+{% block content %}
+<h1>Услуги</h1>
+<div>
+ <ol>
+ {% for service in services %}
+ <li>{{service['title']}}</li>
+ {% endfor %}
+ </ol>
+</div>
+{% endblock %}

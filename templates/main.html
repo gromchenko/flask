@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='app.css') }}">
+</head>
+<body>
+<header class="header">
+    <img src="{{ url_for('static', filename='images/logo.png') }}" width="128px" class="logo">
+    <p>Громченко Николай Валерьевич</p>
+    <div class="clear"></div>
+</header>
+<nav class="menu-main">
+    <ul>
+        <li>
+            <a href="/">Главная</a>
+        </li>
+         <li>
+            <a href="/about">Об юристе</a>
+        </li>
+         <li>
+            <a href="/sevices">Услуги</a>
+        </li>
+         <li>
+            <a href="/contacts">Контакты</a>
+        </li>
+    </ul>
+</nav>
+<main class="content">
+    {% block content %}{% endblock %}
+</main>
+<footer class="footer">
+<p align="center">Все права защищены.</p>
+</footer>
+</body>
+</html>
