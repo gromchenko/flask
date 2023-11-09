@@ -1,0 +1,16 @@
+{% extends 'main.html' %}
+{% block title %}
+Главная страница
+{% endblock %}
+{% block content %}
+<h1>Личный кабинет</h1>
+<ul class="panel">
+    <li>ФИО: {{data.fio}}</li>
+     <li>Login: {{data.login}}</li>
+     <li>Email: {{data.email}}</li>
+     <li>Phone: {{data.phone}}</li>
+    <li><a href="#">Записаться на консультацию</a></li>
+    <li><a href="#">Мои консультации</a></li>
+</ul>
+
+{% endblock %}
