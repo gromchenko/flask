@@ -8,11 +8,28 @@ app.secret_key = 'BAD_SECRET_KEY'
 
 def get_db_connection():
  conn = sqlite3.connect('visitka.db')
+ cursor = conn.cursor()
  return conn
 
-@app.route('/')
+@app.route('/', methods=('GET', 'POST'))
 def index():
- return render_template('index.html')
+ suc = ''
+ if request.method == 'POST':
+  fio = request.form['name']
+  phone = request.form['phone']
+  email = request.form['email']
+  service = request.form['service']
+  message = request.form['message']
+  print(fio, phone, email, service, message)
+  conn = get_db_connection()
+  cursor = conn.cursor()
+
+  cursor.execute('insert into zayavki (fio, email, phone, service, message) values (?,?,?,?,?)',
+                 (fio, email, phone, service, message))
+  conn.commit()
+  conn.close()
+  suc = 'Заявка успешно отправлена'
+ return render_template('index.html', data={'suc':suc})
 
 @app.route('/about', methods=['GET'])
 def about():

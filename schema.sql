@@ -14,3 +14,12 @@ CREATE TABLE users (
  email TEXT NOT NULL,
  phone TEXT NOT NULL,
 );
+
+CREATE TABLE zayavki (
+ id INTEGER PRIMARY KEY AUTOINCREMENT,
+ fio TEXT NOT NULL,
+ email TEXT NOT NULL,
+ phone TEXT NOT NULL,
+ service TEXT NOT NULL,
+ message TEXT NOT NULL,
+ )

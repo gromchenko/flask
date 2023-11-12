@@ -3,8 +3,62 @@
 Главная страница
 {% endblock %}
 {% block content %}
+<div class="cont_form">
+
+     <form method="post" class="contact">
+    {% if data.suc!=''%}
+         <div style="color: green; text-align: center; padding: 20px">{{data.suc}}</div>
+    {% endif %}
+    <fieldset class="contact-inner">
+      <p class="contact-input">
+        <input type="text" name="name" placeholder="Ваше имя..." autofocus>
+      </p>
+        <p class="contact-input">
+        <input type="text" name="email" placeholder="Ваше e-mail.." autofocus>
+      </p>
+                <p class="contact-input">
+        <input type="text" name="phone" placeholder="Ваше телефон.." autofocus>
+      </p>
+
+
+      <p class="contact-input">
+        <label for="select" class="select">
+          <select name="service" id="select">
+            <option value="" selected>устная консультация</option>
+            <option value="1">письменная консультация</option>
+            <option value="1">консультация по телефону</option>
+            <option value="1">Другие</option>
+          </select>
+        </label>
+      </p>
+
+      <p class="contact-input">
+        <textarea name="message" placeholder="Ваше вопрос"></textarea>
+      </p>
+
+      <p class="contact-submit">
+        <input type="submit" value="Отправить">
+      </p>
+    </fieldset>
+  </form>
+</div>
 <h1>Николай Громченко – услуги юриста в Туле</h1>
-<p><img src="{{ url_for('static', filename='images/main.png') }}" width="100%"></p>
+<div style="background-image: url({{ url_for('static', filename='images/main.png') }}); height: 550px; background-size: 100% 100%;padding-top: 14px">
+    <h2 class="h2_h">Запись на консультацию</h2>
+    <div class="form_zayavk">
+        <form>
+            <div class="item_d">
+                <div>ФИО:</div>
+                <div ><input type="text" name="fio" placeholder="ФИО"> </div>
+            </div>
+             <div class="item_d">
+                <div>Дата и время:</div>
+                <div><input type="datetime-local" name="datetime""> </div>
+            </div>
+            <div class="contact-submit"><input type="submit" value="Записаться"> </div>
+        </form>
+    </div>
+</div>
 
 
 {% endblock %}
