@@ -3,9 +3,58 @@
 Главная страница
 {% endblock %}
 {% block content %}
+<div class="listlink">
+    <ul>
+        <li>
+            <a href="https://www.consultant.ru/document/cons_doc_LAW_5142/">Гражданский кодекс РФ</a>
+        </li>
+        <li>
+            <a href="https://www.consultant.ru/document/cons_doc_LAW_34683/">Трудовой кодекс РФ</a>
+        </li>
+        <li>
+            <a href="https://www.consultant.ru/document/cons_doc_LAW_8982/">Семейный кодекс РФ</a>
+        </li>
+        <li>
+            <a href="https://www.consultant.ru/document/cons_doc_LAW_51057/">Жилищный кодекс РФ</a>
+        </li>
+        <li>
+            <a href="https://www.consultant.ru/document/cons_doc_LAW_10699/">Уголовный кодекс РФ</a>
+        </li>
+         <li>
+            <a href="https://www.consultant.ru/document/cons_doc_LAW_39570/">Гражданский процессуальный РФ</a>
+        </li>
+         <li>
+            <a href="https://www.consultant.ru/document/cons_doc_LAW_34481/">Уголовно-процессуальный РФ</a>
+         </li>
+    </ul>
+</div>
+<div class="listcontacts">
+      <ul>
+          <li>
+          Круглосуточный звонок дежурному юристу
+        </li>
+          <li>
+          Телефон дежурного юриста
+        </li>
+           <li>
+          8 (4872) 25-14-30
+        </li>
+           <li>
+          e-mail: urist@gmail.com
+        </li>
+           <li>
+          г. Тула, Проспект Ленина, д. 16, оф. 3
+        </li>
+      </ul>
+</div>
+<div class="header_text">
+    <p>Защита законных прав граждан <br> и их интересов
+    </p>
+</div>
 <div class="cont_form">
 
      <form method="post" class="contact">
+         <h3 align="center">Задайте свой вопрос юристу</h3>
     {% if data.suc!=''%}
          <div style="color: green; text-align: center; padding: 20px">{{data.suc}}</div>
     {% endif %}

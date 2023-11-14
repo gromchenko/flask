@@ -93,8 +93,8 @@ h1{
 .contact {
   position: relative;
   margin: 50px auto;
-  padding: 5px;
-  width: 320px;
+  padding: 5px 5px 5px 5px;
+  width: 450px;
   background: #eef5f7;
   border: 1px solid #cfd5da;
   border-bottom-color: #ccd1d6;
@@ -104,7 +104,7 @@ h1{
 }
 
 .contact-inner {
-  padding: 25px;
+  padding: 55px 25px 25px 25px;
   background: white;
   border-radius: 2px;
 }
@@ -262,7 +262,7 @@ h1{
 }
 .cont_form{
     position: absolute;
-    left: 150px;
+    left: 50px;
     top: 230px
 }
 .form_zayavk{
@@ -288,4 +288,41 @@ item_d div:last-child{
     margin-top: 5px;
     margin-bottom: 5px
     padding: 0
+}
+.listlink{
+    position: fixed;
+    top: 30px;
+    right: 40px;
+    background: white;
+    padding: 20px;
+     border-radius: 10px;
+     border: 8px solid #d64300;
+}
+.listlink ul{
+    list-style: none
+}
+.listlink ul li{
+    margin: 50px 20px
+}
+.listcontacts{
+    position: fixed;
+    right: 40px;
+    bottom: 40px;
+     background: white;
+    padding: 20px 20px 20px 20px;
+    border-radius: 10px;
+    border: 8px solid #d64300;
+}
+.header_text{
+    position: fixed;
+    top: 30px;
+    left: 44px;
+    background: white;
+    padding: 20px;
+     border-radius: 10px;
+     border: 8px solid #d64300;
+     width: 410px;
+     font-size: 20px;
+     font-weight: bold;
+     text-align: center
 }
