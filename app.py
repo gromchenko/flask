@@ -8,12 +8,21 @@ app.secret_key = 'BAD_SECRET_KEY'
 
 def get_db_connection():
  conn = sqlite3.connect('visitka.db')
+
  cursor = conn.cursor()
+
+# cursor.execute('insert into admin (login, password) values ("admin", "admin"')
+ conn.commit()
  return conn
 
 @app.route('/', methods=('GET', 'POST'))
 def index():
+ zaps = ''
  suc = ''
+ zap = ''
+ if 'zap' in session:
+  zap = session['zap']
+  del session['zap']
  if request.method == 'POST':
   fio = request.form['name']
   phone = request.form['phone']
@@ -29,7 +38,7 @@ def index():
   conn.commit()
   conn.close()
   suc = 'Заявка успешно отправлена'
- return render_template('index.html', data={'suc':suc})
+ return render_template('index.html', data={'suc':suc, 'zap':zap, 'zaps': zaps})
 
 @app.route('/about', methods=['GET'])
 def about():
@@ -93,3 +102,53 @@ def panel():
  conn.commit()
  data = dict(fio=suser[1],login=suser[2], email=suser[4],phone=suser[5])
  return render_template('panel.html', data=data)
+
+@app.route('/zap', methods=('POST', 'GET'))
+def zap():
+ fio = request.form['fio']
+ datetime = request.form['datetime']
+ conn = get_db_connection()
+ cursor = conn.cursor()
+ cursor.execute('insert into zap (fio, datetime) values (?,?)',
+                (fio, datetime))
+ session['zap'] = 'Вы успешно записались на консультацию!'
+ conn.commit()
+ conn.close()
+ return redirect('/')
+
+@app.route('/check', methods=('POST', 'GET'))
+def check():
+ fio = request.form['fio']
+
+ conn = get_db_connection()
+ cursor = conn.cursor()
+ cursor.execute('select * from zap where fio=?',
+                (fio,))
+ session['zap'] = ''
+ data = cursor.fetchall()
+
+ if data:
+  dd = data
+ else:
+  dd = ''
+ conn.commit()
+ conn.close()
+ suc = ''
+ zap = ''
+ print(dd)
+
+ return render_template('index.html', data={'suc':suc, 'zap':zap, 'zaps': dd})
+
+@app.route('/admin', methods=('POST', 'GET'))
+def admin():
+ if request.method == 'POST':
+  conn = get_db_connection()
+  cursor = conn.cursor()
+  login = request.form['login']
+  password = request.form['password']
+  suser = cursor.execute('select * from admin').fetchone()
+  print(suser)
+  conn.commit()
+  return render_template('admin/login.html')
+ else:
+  return render_template('admin/login.html')

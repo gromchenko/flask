@@ -1,0 +1,22 @@
+{% extends 'admin/main.html' %}
+{% block title %}
+Главная страница
+{% endblock %}
+{% block content %}
+
+ <form method="post" action="/admin">
+
+    <div class="row">
+        <div>Логин: </div>
+        <div><input type="text" placeholder="Логин" name="login"></div>
+    </div>
+     <div class="row">
+        <div>Пароль: </div>
+        <div><input type="password" placeholder="Password" name="password"></div>
+    </div>
+
+    <div class="row">
+        <div class="btn"><input type="submit" value="Авторизация"></div>
+    </div>
+</form>
+{% endblock %}

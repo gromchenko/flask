@@ -29,23 +29,28 @@
     </ul>
 </div>
 <div class="listcontacts">
-      <ul>
-          <li>
-          Круглосуточный звонок дежурному юристу
-        </li>
-          <li>
-          Телефон дежурного юриста
-        </li>
-           <li>
-          8 (4872) 25-14-30
-        </li>
-           <li>
-          e-mail: urist@gmail.com
-        </li>
-           <li>
-          г. Тула, Проспект Ленина, д. 16, оф. 3
-        </li>
-      </ul>
+    <h3>Проверка даты и времени записи на консультацию</h3>
+     <form method="post" action="check">
+        <input type="text" name="fio" placeholder="ФИО">
+        <input type="submit" value="Проверить">
+    </form>
+    {% if data.zaps == '' %}
+
+    {% else %}
+    <br />
+        <table align="center" border="1">
+            <tr>
+                <th>ФИО</th>
+                <th>Дата и время</th>
+            </tr>
+        {% for z in data.zaps %}
+        <tr>
+            <td>{{z[1]}}</td>
+            <td>{{z[2].replace('T', ' ')}}</td>
+        </tr>
+        {% endfor %}
+        </table>
+    {% endif %}
 </div>
 <div class="header_text">
     <p>Защита законных прав граждан <br> и их интересов
@@ -91,18 +96,22 @@
     </fieldset>
   </form>
 </div>
-<h1>Николай Громченко – услуги юриста в Туле</h1>
+<h1>Предоставляем услуги юриста в Туле</h1>
 <div style="background-image: url({{ url_for('static', filename='images/main.png') }}); height: 550px; background-size: 100% 100%;padding-top: 14px">
     <h2 class="h2_h">Запись на консультацию</h2>
+
     <div class="form_zayavk">
-        <form>
+        {% if data.zap!=''%}
+         <p style="color: green; text-align: center; padding: 20px;font-size: 22px">{{data.zap}}</p>
+        {% endif %}
+        <form method="POST" action="/zap">
             <div class="item_d">
                 <div>ФИО:</div>
-                <div ><input type="text" name="fio" placeholder="ФИО"> </div>
+                <div ><input type="text" name="fio" placeholder="ФИО" required> </div>
             </div>
              <div class="item_d">
                 <div>Дата и время:</div>
-                <div><input type="datetime-local" name="datetime""> </div>
+                <div><input type="datetime-local" name="datetime" required> </div>
             </div>
             <div class="contact-submit"><input type="submit" value="Записаться"> </div>
         </form>
