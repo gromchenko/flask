@@ -233,7 +233,7 @@ h1{
 }
 
 .contact-submit {
-  text-align: right;
+  text-align: left;
 }
 .contact-submit > input {
   display: inline-block;

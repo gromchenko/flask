@@ -3,8 +3,86 @@
 Главная страница
 {% endblock %}
 {% block content %}
+{% if 'login' in session %}
+<div>
+    <ul>
+        <li>
+            <a href="/clearzayavki">Очистить таблицу заявки</a>
+        </li>
+        <li>
+            <a href="/clearzap">Очистить таблицу запись на консультацию</a>
+        </li>
+         <li>
+            <a href="/freedatetime">Редактировать свободное время и дату</a>
+        </li>
+        <li>
+            <a href="/logoutadmin">Выход</a>
+        </li>
 
- <form method="post" action="/admin">
+    </ul>
+
+</div>
+
+<h2 align="center">Админ панель</h2>
+<h3 align="center">Заявки</h3>
+    <table border="1" align="center" width="100%">
+        <tr>
+            <th>
+                id
+            </th>
+            <th>
+                ФИО
+            </th>
+             <th>
+                email
+            </th>
+             <th>
+                phone
+            </th>
+             <th>
+                service
+            </th>
+            <th>
+                message
+            </th>
+        </tr>
+        {% for z in data.zayavki %}
+            <tr>
+                <td style="padding: 8px">{{z[0]}}</td>
+                <td style="padding: 8px">{{z[1]}}</td>
+                 <td style="padding: 8px">{{z[2]}}</td>
+                 <td style="padding: 8px">{{z[3]}}</td>
+                 <td style="padding: 8px">{{z[4]}}</td>
+                 <td style="padding: 8px">{{z[5]}}</td>
+
+            </tr>
+        {% endfor %}
+    </table>
+<h3 align="center">Запись на консультацию</h3>
+    <table border="1" align="center" width="100%">
+        <tr>
+            <th>
+                id
+            </th>
+            <th>
+                ФИО
+            </th>
+             <th>
+                DATETIME
+             </th>
+
+        </tr>
+        {% for z in data.zap %}
+            <tr>
+                <td style="padding: 8px">{{z[0]}}</td>
+                <td style="padding: 8px">{{z[1]}}</td>
+                 <td style="padding: 8px">{{z[2]}}</td>
+            </tr>
+        {% endfor %}
+    </table>
+
+{% else %}
+<form method="post" action="/admin">
 
     <div class="row">
         <div>Логин: </div>
@@ -19,4 +97,6 @@
         <div class="btn"><input type="submit" value="Авторизация"></div>
     </div>
 </form>
+
+{% endif %}
 {% endblock %}

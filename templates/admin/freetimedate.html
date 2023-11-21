@@ -1,0 +1,64 @@
+{% extends 'admin/main.html' %}
+{% block title %}
+Главная страница
+{% endblock %}
+{% block content %}
+<div>
+    <ul>
+        <li>
+            <a href="/clearzayavki">Очистить таблицу заявки</a>
+        </li>
+        <li>
+            <a href="/clearzap">Очистить таблицу запись на консультацию</a>
+        </li>
+         <li>
+            <a href="/freedatetime">Редактировать свободное время и дату</a>
+        </li>
+        <li>
+            <a href="/logoutadmin">Выход</a>
+        </li>
+
+    </ul>
+
+</div>
+
+<h2 align="center">Добавить время и дату</h2>
+
+<form method="post" >
+
+    <div class="row">
+        <div>Логин: </div>
+        <div><input type="datetime-local"  name="datetime"></div>
+    </div>
+    <div class="row">
+        <div class="btn"><input type="submit" value="Добавить"></div>
+    </div>
+</form>
+ <table border="1" align="center" width="100%">
+        <tr>
+            <th>
+                id
+            </th>
+            <th>
+                Дата и время
+            </th>
+             <th>
+                Статус
+            </th>
+
+        </tr>
+        {% for z in data.freedatetimeall %}
+            <tr>
+                <td style="padding: 8px">{{z[0]}}</td>
+                <td style="padding: 8px">{{z[1]}}</td>
+                 <td style="padding: 8px">
+                 {% if z[2]=='0' %}
+                     Свободно
+                     {% else %}
+                     Занято
+                     {% endif %}
+                 </td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}

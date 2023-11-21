@@ -4,6 +4,7 @@
 {% endblock %}
 {% block content %}
 <div class="listlink">
+    <h2>Справочная информация для граждан</h2>
     <ul>
         <li>
             <a href="https://www.consultant.ru/document/cons_doc_LAW_5142/">Гражданский кодекс РФ</a>
@@ -78,10 +79,10 @@
       <p class="contact-input">
         <label for="select" class="select">
           <select name="service" id="select">
-            <option value="" selected>устная консультация</option>
-            <option value="1">письменная консультация</option>
-            <option value="1">консультация по телефону</option>
-            <option value="1">Другие</option>
+            <option value="устная консультация" selected>устная консультация</option>
+            <option value="письменная консультация">письменная консультация</option>
+            <option value="консультация по телефону">консультация по телефону</option>
+            <option value="Другие">Другие</option>
           </select>
         </label>
       </p>
@@ -101,8 +102,12 @@
     <h2 class="h2_h">Запись на консультацию</h2>
 
     <div class="form_zayavk">
+
         {% if data.zap!=''%}
          <p style="color: green; text-align: center; padding: 20px;font-size: 22px">{{data.zap}}</p>
+        {% endif %}
+         {% if data.zap_error!=''%}
+         <p style="color: red; text-align: center; padding: 20px;font-size: 22px">{{data.zap_error}}</p>
         {% endif %}
         <form method="POST" action="/zap">
             <div class="item_d">

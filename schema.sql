@@ -39,3 +39,13 @@ CREATE TABLE zayavki (
  login TEXT NOT NULL,
  password TEXT NOT NULL
  )
+
+ CREATE TABLE freetime (
+ id INTEGER PRIMARY KEY AUTOINCREMENT,
+ datetime TEXT NOT NULL
+);
+ CREATE TABLE freedatetime (
+ id INTEGER PRIMARY KEY AUTOINCREMENT,
+ datetime TEXT NOT NULL,
+ status TEXT NOT NULL
+);

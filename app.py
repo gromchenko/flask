@@ -20,9 +20,13 @@ def index():
  zaps = ''
  suc = ''
  zap = ''
+ zap_error = ''
  if 'zap' in session:
   zap = session['zap']
   del session['zap']
+ if 'zap_error' in session:
+  zap_error = session['zap_error']
+  del session['zap_error']
  if request.method == 'POST':
   fio = request.form['name']
   phone = request.form['phone']
@@ -38,7 +42,7 @@ def index():
   conn.commit()
   conn.close()
   suc = 'Заявка успешно отправлена'
- return render_template('index.html', data={'suc':suc, 'zap':zap, 'zaps': zaps})
+ return render_template('index.html', data={'suc':suc, 'zap':zap, 'zaps': zaps, 'zap_error':zap_error})
 
 @app.route('/about', methods=['GET'])
 def about():
@@ -105,15 +109,23 @@ def panel():
 
 @app.route('/zap', methods=('POST', 'GET'))
 def zap():
+ session['zap_error'] = ''
  fio = request.form['fio']
  datetime = request.form['datetime']
  conn = get_db_connection()
  cursor = conn.cursor()
- cursor.execute('insert into zap (fio, datetime) values (?,?)',
+ datetimel = cursor.execute('select * from freedatetime').fetchall()
+ if datetime in datetimel:
+  cursor.execute('update freedatetime set status = 1 where datetime = ?', (datetime, ))
+  conn.commit()
+  cursor.execute('insert into zap (fio, datetime) values (?,?)',
                 (fio, datetime))
- session['zap'] = 'Вы успешно записались на консультацию!'
- conn.commit()
- conn.close()
+  session['zap'] = 'Вы успешно записались на консультацию!'
+  conn.commit()
+  conn.close()
+ else:
+  session['zap_error'] = 'Выберете другую дату и время!'
+
  return redirect('/')
 
 @app.route('/check', methods=('POST', 'GET'))
@@ -139,16 +151,66 @@ def check():
 
  return render_template('index.html', data={'suc':suc, 'zap':zap, 'zaps': dd})
 
+@app.route('/logoutadmin', methods=('POST', 'GET'))
+def logoutadmin():
+ if 'login' in session:
+  del session['login']
+ return redirect('/')
 @app.route('/admin', methods=('POST', 'GET'))
 def admin():
+ conn = get_db_connection()
+ cursor = conn.cursor()
+ zayavki = cursor.execute('select * from zayavki').fetchall()
+ conn.commit()
+ zap = cursor.execute('select * from zap').fetchall()
+ conn.commit()
  if request.method == 'POST':
-  conn = get_db_connection()
-  cursor = conn.cursor()
+
   login = request.form['login']
   password = request.form['password']
-  suser = cursor.execute('select * from admin').fetchone()
-  print(suser)
+  #cursor.execute('insert into admin (login, password) values ("admin", "admin")')
+  suser = cursor.execute('select * from admin where login=? and password=?', (login, password)).fetchone()
   conn.commit()
-  return render_template('admin/login.html')
+  if len(suser) > 0:
+   session['login'] = login
+
+
+  return render_template('admin/login.html', data={'zayavki':zayavki, 'zap':zap})
  else:
-  return render_template('admin/login.html')
+  return render_template('admin/login.html', data={'zayavki': zayavki, 'zap':zap})
+
+
+@app.route('/clearzayavki', methods=('POST', 'GET'))
+def clearzayavki():
+ if 'login' in session:
+  conn = get_db_connection()
+  cursor = conn.cursor()
+  cursor.execute('delete from zayavki')
+  conn.commit()
+ return redirect('/admin')
+
+
+@app.route('/clearzap', methods=('POST', 'GET'))
+def clearzap():
+ if 'login' in session:
+  conn = get_db_connection()
+  cursor = conn.cursor()
+  cursor.execute('delete from zap')
+  conn.commit()
+ return redirect('/admin')
+
+@app.route('/freedatetime', methods=('POST', 'GET'))
+def freedatetime():
+ conn = get_db_connection()
+ cursor = conn.cursor()
+
+ if 'login' in session:
+  if request.method == 'POST':
+
+   datetime = request.form['datetime']
+   cursor.execute('insert into freedatetime (datetime, status) values (?, ?)', (datetime, '0'))
+   conn.commit()
+ freedatetimeall = cursor.execute('select * from freedatetime').fetchall()
+ conn.commit()
+ return render_template('admin/freetimedate.html', data={'freedatetimeall': freedatetimeall})
+
