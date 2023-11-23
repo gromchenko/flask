@@ -18,8 +18,20 @@
 <nav class="menu-main">
     <ul>
         <li>
-            <a href="/">Главная</a>
+            <a href="/">На сайт</a>
         </li>
+    {% if 'login' in session %}
+          <li>
+            <a href="/admin">Админ панель</a>
+        </li>
+         <li>
+            <a href="/freedatetime">Редактировать свободное время и дату</a>
+        </li>
+
+        <li>
+            <a href="/logoutadmin">Выход</a>
+        </li>
+    {% endif %}
     </ul>
 </nav>
 <main class="content">

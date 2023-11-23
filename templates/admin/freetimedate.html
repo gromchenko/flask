@@ -3,24 +3,6 @@
 Главная страница
 {% endblock %}
 {% block content %}
-<div>
-    <ul>
-        <li>
-            <a href="/clearzayavki">Очистить таблицу заявки</a>
-        </li>
-        <li>
-            <a href="/clearzap">Очистить таблицу запись на консультацию</a>
-        </li>
-         <li>
-            <a href="/freedatetime">Редактировать свободное время и дату</a>
-        </li>
-        <li>
-            <a href="/logoutadmin">Выход</a>
-        </li>
-
-    </ul>
-
-</div>
 
 <h2 align="center">Добавить время и дату</h2>
 
@@ -34,30 +16,39 @@
         <div class="btn"><input type="submit" value="Добавить"></div>
     </div>
 </form>
- <table border="1" align="center" width="100%">
+ <table border="1" align="center" width="100%" style="background: #fff">
         <tr>
+
             <th>
-                id
+                Дата
             </th>
             <th>
-                Дата и время
+                Время
             </th>
              <th>
                 Статус
             </th>
-
+            <th>
+                Удалить
+            </th>
         </tr>
         {% for z in data.freedatetimeall %}
             <tr>
-                <td style="padding: 8px">{{z[0]}}</td>
-                <td style="padding: 8px">{{z[1]}}</td>
+                <td style="padding: 8px">{{z[1].replace('T', ' ')[:10]}}</td>
+                <td style="padding: 8px">{{z[1].replace('T', ' ')[10:]}}</td>
                  <td style="padding: 8px">
                  {% if z[2]=='0' %}
-                     Свободно
+                     <span style="color: green">Свободно</span>
                      {% else %}
-                     Занято
+                     <span style="color: red">Занято</span>
                      {% endif %}
                  </td>
+                <td>
+                    <form action="/deletedatetime" method="POST" align="center">
+                        <input type="hidden" name="id" value="{{z[0]}}">
+                        <button>Удалить</button>
+                    </form>
+                </td>
             </tr>
         {% endfor %}
     </table>

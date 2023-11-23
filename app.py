@@ -114,8 +114,12 @@ def zap():
  datetime = request.form['datetime']
  conn = get_db_connection()
  cursor = conn.cursor()
- datetimel = cursor.execute('select * from freedatetime').fetchall()
- if datetime in datetimel:
+ datetimel = cursor.execute('select * from freedatetime where status = 0').fetchall()
+ dd = []
+ for i in datetimel:
+  dd.append(i[1])
+
+ if datetime in dd:
   cursor.execute('update freedatetime set status = 1 where datetime = ?', (datetime, ))
   conn.commit()
   cursor.execute('insert into zap (fio, datetime) values (?,?)',
@@ -214,3 +218,20 @@ def freedatetime():
  conn.commit()
  return render_template('admin/freetimedate.html', data={'freedatetimeall': freedatetimeall})
 
+
+@app.route('/deletedatetime', methods=('POST', 'GET'))
+def deletedatetime():
+ conn = get_db_connection()
+ cursor = conn.cursor()
+ if 'login' in session:
+  if request.method == 'POST':
+   id = request.form['id']
+   datetime = cursor.execute('select * from freedatetime where id=?', (id,)).fetchone()[1]
+   conn.commit()
+
+   cursor.execute('delete from freedatetime where id=?', (id,))
+   conn.commit()
+
+   cursor.execute('delete from zap where datetime=?', (datetime,))
+   conn.commit()
+ return redirect('freedatetime')
