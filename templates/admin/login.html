@@ -25,7 +25,7 @@
         </tr>
         {% for z in data.zap %}
             <tr>
-                <td align="center" style="padding: 8px">{{z[1]}}</td>
+                <td align="center" style="padding: 8px"><a href="userdetail/{{z[3]}}">{{z[1]}}</a></td>
                  <td align="center" style="padding: 8px">{{z[2].replace('T', ' ')[:10]}} {{z[2].replace('T', ' ')[10:]}}</td>
             </tr>
         {% endfor %}
@@ -71,10 +71,10 @@
 <div>
 <uL>
      <li>
-            <a href="/clearzayavki">Очистить таблицу вопросы граждан</a>
+            <a href="/clearzayavki" style="color: red; font-weight: 700">Очистить таблицу вопросы граждан</a>
         </li>
         <li>
-            <a href="/clearzap">Очистить таблицу запись на консультацию</a>
+            <a href="/clearzap" style="color: red; font-weight: 700">Очистить таблицу запись на консультацию</a>
         </li>
 </uL>
 

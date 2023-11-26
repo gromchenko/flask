@@ -109,13 +109,18 @@
          {% if data.zap_error!=''%}
          <p style="color: red; text-align: center; padding: 20px;font-size: 22px">{{data.zap_error}}</p>
         {% endif %}
+
+        {% if data.error_auth!='' %}
+        <p style="color: red; text-align: center; padding: 20px;font-size: 22px">{{data.error_auth}}</p>
+        {% endif %}
         <form method="POST" action="/zap">
-            <div class="item_d">
+            <!--<div class="item_d">
+
                 <div>ФИО:</div>
                 <div ><input type="text" name="fio" placeholder="ФИО" required> </div>
-            </div>
+            </div>-->
              <div class="item_d">
-                <div>Дата и время:</div>
+                <div style="width: 200px">Дата и время:</div>
                 <div><input type="datetime-local" name="datetime" required> </div>
             </div>
             <div class="contact-submit"><input type="submit" value="Записаться"> </div>

@@ -1,0 +1,13 @@
+{% extends 'admin/main.html' %}
+{% block title %}
+Главная страница
+{% endblock %}
+{% block content %}
+<p><a href="/admin">Вернуться назад</a></p>
+<ul class="panel">
+    <li>ФИО: {{data.user[1]}}</li>
+     <li>Login: {{data.user[2]}}</li>
+     <li>Email: {{data.user[3]}}</li>
+     <li>Phone: {{data.user[4]}}</li>
+</ul>
+{% endblock %}

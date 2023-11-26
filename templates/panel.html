@@ -9,8 +9,12 @@
      <li>Login: {{data.login}}</li>
      <li>Email: {{data.email}}</li>
      <li>Phone: {{data.phone}}</li>
-    <li><a href="#">Записаться на консультацию</a></li>
-    <li><a href="#">Мои консультации</a></li>
+    <li><a href="/">Записаться на консультацию</a></li>
 </ul>
-
+<h2>Время назначенных консультаций</h2>
+<ul style="font-size: 20px">
+    {% for i in data.cons %}
+    <li><b>{{i[2].replace('T', ' ')}}</b></li>
+    {% endfor %}
+</ul>
 {% endblock %}

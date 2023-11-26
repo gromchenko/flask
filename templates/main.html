@@ -27,6 +27,9 @@
             <a href="/sevices">Услуги</a>
         </li>
          <li>
+            <a href="/price">Стоимость услуг</a>
+        </li>
+         <li>
             <a href="/contacts">Контакты</a>
         </li>
          <li>
@@ -38,6 +41,14 @@
         <li>
             <a href="/admin">Вход для админа</a>
         </li>
+        {% if 'user' in session %}
+         <li>
+            <a href="/panel">Личный кабинет</a>
+        </li>
+         <li>
+            <a href="/logoutuser">Выход</a>
+        </li>
+        {% endif %}
     </ul>
 </nav>
 <main class="content">

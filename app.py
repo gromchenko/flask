@@ -21,9 +21,13 @@ def index():
  suc = ''
  zap = ''
  zap_error = ''
+ error_auth = ''
  if 'zap' in session:
   zap = session['zap']
   del session['zap']
+ if 'error_auth' in session:
+  error_auth = session['error_auth']
+  del session['error_auth']
  if 'zap_error' in session:
   zap_error = session['zap_error']
   del session['zap_error']
@@ -42,7 +46,7 @@ def index():
   conn.commit()
   conn.close()
   suc = 'Заявка успешно отправлена'
- return render_template('index.html', data={'suc':suc, 'zap':zap, 'zaps': zaps, 'zap_error':zap_error})
+ return render_template('index.html', data={'suc':suc, 'zap':zap, 'zaps': zaps, 'zap_error':zap_error, 'error_auth': error_auth})
 
 @app.route('/about', methods=['GET'])
 def about():
@@ -89,8 +93,9 @@ def auth():
   suser = cursor.execute('select * from users where login=? and password=?', (login, password)).fetchone()
   conn.commit()
   if not suser == None:
-   session['login'] = suser[2]
+   session['user'] = suser[2]
    suc = 'Вы успешно авторизировались!'
+   return redirect('panel')
   else:
    suc = 'Ошибка авторизации'''
  data = dict(suc=suc)
@@ -99,37 +104,46 @@ def auth():
 
 @app.route('/panel', methods=('GET', 'POST'))
 def panel():
- login = session['login']
- conn = get_db_connection()
- cursor = conn.cursor()
- suser = cursor.execute('select * from users where login=?', (login,)).fetchone()
- conn.commit()
- data = dict(fio=suser[1],login=suser[2], email=suser[4],phone=suser[5])
- return render_template('panel.html', data=data)
+ if 'user' in session:
+  login = session['user']
+  conn = get_db_connection()
+  cursor = conn.cursor()
+  suser = cursor.execute('select * from users where login=?', (login,)).fetchone()
+  conn.commit()
+
+  cons = cursor.execute('select * from zap where fio=?', (login,)).fetchall()
+  conn.commit()
+  print(cons)
+  data = dict(fio=suser[1],login=suser[2], email=suser[4],phone=suser[5], cons=cons)
+  return render_template('panel.html', data=data)
+ else:
+  return redirect('auth')
 
 @app.route('/zap', methods=('POST', 'GET'))
 def zap():
- session['zap_error'] = ''
- fio = request.form['fio']
- datetime = request.form['datetime']
- conn = get_db_connection()
- cursor = conn.cursor()
- datetimel = cursor.execute('select * from freedatetime where status = 0').fetchall()
- dd = []
- for i in datetimel:
-  dd.append(i[1])
+ if 'user' in session:
+  session['zap_error'] = ''
+  #fio = request.form['fio']
+  datetime = request.form['datetime']
+  conn = get_db_connection()
+  cursor = conn.cursor()
+  datetimel = cursor.execute('select * from freedatetime where status = 0').fetchall()
+  dd = []
+  for i in datetimel:
+   dd.append(i[1])
 
- if datetime in dd:
-  cursor.execute('update freedatetime set status = 1 where datetime = ?', (datetime, ))
-  conn.commit()
-  cursor.execute('insert into zap (fio, datetime) values (?,?)',
-                (fio, datetime))
-  session['zap'] = 'Вы успешно записались на консультацию!'
-  conn.commit()
-  conn.close()
+  if datetime in dd:
+   cursor.execute('update freedatetime set status = 1 where datetime = ?', (datetime, ))
+   conn.commit()
+   cursor.execute('insert into zap (fio, datetime) values (?,?)',
+                 (session['user'], datetime))
+   session['zap'] = 'Вы успешно записались на консультацию!'
+   conn.commit()
+   conn.close()
+  else:
+   session['zap_error'] = 'Выберете другую дату и время!'
  else:
-  session['zap_error'] = 'Выберете другую дату и время!'
-
+  session['error_auth'] = 'Для того, чтобы записаться, необходимо пройти авторизацию'
  return redirect('/')
 
 @app.route('/check', methods=('POST', 'GET'))
@@ -166,8 +180,18 @@ def admin():
  cursor = conn.cursor()
  zayavki = cursor.execute('select * from zayavki').fetchall()
  conn.commit()
- zap = cursor.execute('select * from zap').fetchall()
+
+ zap = cursor.execute('select * from zap order by id desc').fetchall()
  conn.commit()
+ users_fio = []
+ for i in zap:
+  fio = cursor.execute('select * from users where login=?', (i[1], )).fetchone()
+  conn.commit()
+  if fio == None:
+   users_fio.append((i[0], i[1], i[2], 0))
+  else:
+   users_fio.append((i[0], fio[1], i[2], fio[0]))
+
  if request.method == 'POST':
 
   login = request.form['login']
@@ -179,9 +203,9 @@ def admin():
    session['login'] = login
 
 
-  return render_template('admin/login.html', data={'zayavki':zayavki, 'zap':zap})
+  return render_template('admin/login.html', data={'zayavki':zayavki, 'zap':users_fio})
  else:
-  return render_template('admin/login.html', data={'zayavki': zayavki, 'zap':zap})
+  return render_template('admin/login.html', data={'zayavki': zayavki, 'zap':users_fio})
 
 
 @app.route('/clearzayavki', methods=('POST', 'GET'))
@@ -214,7 +238,7 @@ def freedatetime():
    datetime = request.form['datetime']
    cursor.execute('insert into freedatetime (datetime, status) values (?, ?)', (datetime, '0'))
    conn.commit()
- freedatetimeall = cursor.execute('select * from freedatetime').fetchall()
+ freedatetimeall = cursor.execute('select * from freedatetime order by datetime').fetchall()
  conn.commit()
  return render_template('admin/freetimedate.html', data={'freedatetimeall': freedatetimeall})
 
@@ -235,3 +259,26 @@ def deletedatetime():
    cursor.execute('delete from zap where datetime=?', (datetime,))
    conn.commit()
  return redirect('freedatetime')
+
+
+
+@app.route('/price', methods=['GET'])
+def price():
+ return render_template('price.html')
+
+
+@app.route('/logoutuser', methods=('POST', 'GET'))
+def logoutuser():
+ if 'user' in session:
+  del session['user']
+ return redirect('/')
+
+@app.route('/userdetail/<id>', methods=('POST', 'GET'))
+def userdetail(id):
+ conn = get_db_connection()
+ cursor = conn.cursor()
+ user = cursor.execute('select * from users where id=? ', (id,)).fetchone()
+ conn.commit()
+ return render_template('admin/dateiluser.html', data={'user': user})
+
+
