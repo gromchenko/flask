@@ -110,11 +110,13 @@ def panel():
   cursor = conn.cursor()
   suser = cursor.execute('select * from users where login=?', (login,)).fetchone()
   conn.commit()
-
-  cons = cursor.execute('select * from zap where fio=?', (login,)).fetchall()
+  datetimes = cursor.execute('select * from freedatetime where status=0 order by datetime').fetchall()
   conn.commit()
+  cons = cursor.execute('select * from zap where fio=?', (login,)).fetchall()
+  #cons = cursor.execute('select * from zap').fetchall()
   print(cons)
-  data = dict(fio=suser[1],login=suser[2], email=suser[4],phone=suser[5], cons=cons)
+  conn.commit()
+  data = dict(fio=suser[1],login=suser[2], email=suser[4],phone=suser[5], cons=cons, datetimes=datetimes)
   return render_template('panel.html', data=data)
  else:
   return redirect('auth')
@@ -182,6 +184,9 @@ def admin():
  conn.commit()
 
  zap = cursor.execute('select * from zap order by id desc').fetchall()
+
+ conn.commit()
+ users = cursor.execute('select * from users').fetchall()
  conn.commit()
  users_fio = []
  for i in zap:
@@ -203,9 +208,9 @@ def admin():
    session['login'] = login
 
 
-  return render_template('admin/login.html', data={'zayavki':zayavki, 'zap':users_fio})
+  return render_template('admin/login.html', data={'zayavki':zayavki, 'zap':users_fio, 'user':users})
  else:
-  return render_template('admin/login.html', data={'zayavki': zayavki, 'zap':users_fio})
+  return render_template('admin/login.html', data={'zayavki': zayavki, 'zap':users_fio, 'users':users})
 
 
 @app.route('/clearzayavki', methods=('POST', 'GET'))
@@ -281,4 +286,27 @@ def userdetail(id):
  conn.commit()
  return render_template('admin/dateiluser.html', data={'user': user})
 
+@app.route('/clearusers', methods=('POST', 'GET'))
+def clearusers():
+ if 'login' in session:
+     conn = get_db_connection()
+     cursor = conn.cursor()
+     cursor.execute('delete from users')
+     conn.commit()
+ return redirect('/admin')
+
+@app.route('/datetimezap/<id>', methods=('POST', 'GET'))
+def datetimezap(id):
+ if 'login' in session:
+     conn = get_db_connection()
+     cursor = conn.cursor()
+     cursor.execute('update freedatetime set status = 1 where id = ?', (int(id),))
+     conn.commit()
+     datetime = cursor.execute('select * from freedatetime where id=?', (id,)).fetchone()
+     conn.commit()
+
+     cursor.execute('insert into zap (fio, datetime) values (?,?)',
+                    (session['user'], datetime[1]))
+     conn.commit()
+ return redirect('/panel')
 

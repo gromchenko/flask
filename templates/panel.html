@@ -9,12 +9,51 @@
      <li>Login: {{data.login}}</li>
      <li>Email: {{data.email}}</li>
      <li>Phone: {{data.phone}}</li>
-    <li><a href="/">Записаться на консультацию</a></li>
 </ul>
 <h2>Время назначенных консультаций</h2>
-<ul style="font-size: 20px">
-    {% for i in data.cons %}
-    <li><b>{{i[2].replace('T', ' ')}}</b></li>
-    {% endfor %}
-</ul>
+
+<table border="1" align="center" width="100%" style="background: #fff;background: #fff;
+    ">
+        <tr>
+
+            <th>
+                Дата
+            </th>
+             <th>
+                Время
+            </th>
+
+        </tr>
+        {% for z in data.cons %}
+            <tr>
+
+                 <td style="padding: 8px">{{z[2][:10]}}</td>
+                 <td style="padding: 8px">{{z[2][11:]}}</td>
+            </tr>
+        {% endfor %}
+    </table>
+<h2>Свободные даты и время для консультации</h2>
+ <table border="1" align="center" width="100%" style="background: #fff;background: #fff;
+    ">
+        <tr>
+
+            <th>
+                Дата
+            </th>
+             <th>
+                Время
+            </th>
+            <th>
+
+            </th>
+        </tr>
+        {% for z in data.datetimes %}
+            <tr>
+
+                 <td style="padding: 8px">{{z[1][:10]}}</td>
+                 <td style="padding: 8px">{{z[1][11:]}}</td>
+                <td><a href="/datetimezap/{{z[0]}}">Записаться</a></td>
+            </tr>
+        {% endfor %}
+    </table>
 {% endblock %}

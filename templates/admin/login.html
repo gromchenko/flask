@@ -67,6 +67,43 @@
         {% endfor %}
     </table>
     </div>
+<h3 align="center">Список всех зарегистрированных пользователей</h3>
+<div style="overflow-y: scroll;
+    height: 302px;
+    display: block;
+    width: 103%;">
+    <table border="1" align="center" width="100%" style="background: #fff;background: #fff;
+    ">
+        <tr>
+
+            <th>
+                ФИО клиента
+            </th>
+             <th>
+                Логин
+            </th>
+             <th width="160px">
+                Пароль
+            </th>
+             <th>
+                Email
+            </th>
+            <th>
+                Телефон
+            </th>
+        </tr>
+        {% for z in data.users %}
+            <tr>
+                <td style="padding: 8px">{{z[1]}}</td>
+                 <td style="padding: 8px">{{z[2]}}</td>
+                 <td style="padding: 8px">{{z[3]}}</td>
+                 <td style="padding: 8px">{{z[4]}}</td>
+                 <td style="padding: 8px">{{z[5]}}</td>
+
+            </tr>
+        {% endfor %}
+    </table>
+    </div>
 
 <div>
 <uL>
@@ -75,6 +112,9 @@
         </li>
         <li>
             <a href="/clearzap" style="color: red; font-weight: 700">Очистить таблицу запись на консультацию</a>
+        </li>
+    <li>
+            <a href="/clearusers" style="color: red; font-weight: 700">Очистить таблицу пользователей</a>
         </li>
 </uL>
 

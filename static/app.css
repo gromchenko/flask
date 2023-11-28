@@ -300,12 +300,16 @@ item_d div:last-child{
     padding: 20px;
      border-radius: 10px;
      border: 8px solid #d64300;
+
 }
+
 .listlink ul{
     list-style: none
 }
 .listlink ul li{
-    margin: 50px 20px
+    margin: 31px 20px;
+    font-size: 20px;
+    font-weight: 400
 }
 .listcontacts{
     text-align: center;

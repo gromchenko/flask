@@ -32,12 +32,14 @@
          <li>
             <a href="/contacts">Контакты</a>
         </li>
+        {% if not 'user' in session %}
          <li>
             <a href="/reg">Регистрация</a>
         </li>
         <li>
             <a href="/auth">Авторизация</a>
         </li>
+        {% endif %}
         <li>
             <a href="/admin">Вход для админа</a>
         </li>

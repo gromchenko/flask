@@ -3,8 +3,8 @@
 Главная страница
 {% endblock %}
 {% block content %}
-<div class="listlink">
-    <h2>Справочная информация для граждан</h2>
+<div class="listlink" style="width: 400px">
+    <h2 align="center">Справочная информация для граждан</h2>
     <ul>
         <li>
             <a href="https://www.consultant.ru/document/cons_doc_LAW_5142/">Гражданский кодекс РФ</a>
@@ -27,32 +27,25 @@
          <li>
             <a href="https://www.consultant.ru/document/cons_doc_LAW_34481/">Уголовно-процессуальный РФ</a>
          </li>
+        <li>
+            <a href="https://www.consultant.ru/document/cons_doc_LAW_34661/">Кодекс об административных правонарушениях (КоАП РФ)</a>
+        </li>
+        <li>
+            <a href="https://www.consultant.ru/document/cons_doc_LAW_19671/">Налоговый кодекс РФ</a>
+        </li>
+        <li>
+        <a href="https://www.consultant.ru/document/cons_doc_LAW_33773/">"Земельный кодекс РФ" </a>
+        </li>
+         <li>
+        <a href="https://www.consultant.ru/document/cons_doc_LAW_33773/">"Кодекс административного судопроизводства РФ" </a>
+        </li>
+        <li >
+        <a href="https://www.consultant.ru/document/cons_doc_LAW_2255/" >Закон РФ "О праве граждан Российской Федерации на свободу передвижения, выбор места пребывания и жительства в пределах Российской Федерации"</a>
+        </li>
+
     </ul>
 </div>
-<div class="listcontacts">
-    <h3>Проверка даты и времени записи на консультацию</h3>
-     <form method="post" action="check">
-        <input type="text" name="fio" placeholder="ФИО">
-        <input type="submit" value="Проверить">
-    </form>
-    {% if data.zaps == '' %}
 
-    {% else %}
-    <br />
-        <table align="center" border="1">
-            <tr>
-                <th>ФИО</th>
-                <th>Дата и время</th>
-            </tr>
-        {% for z in data.zaps %}
-        <tr>
-            <td>{{z[1]}}</td>
-            <td>{{z[2].replace('T', ' ')}}</td>
-        </tr>
-        {% endfor %}
-        </table>
-    {% endif %}
-</div>
 <div class="header_text">
     <p>Время приёма граждан <br><br> понедельник - пятница<br><br> Часы приёма<br><br> 09:00, 11:00, 14:00, 16:00<br>
     </p>
@@ -100,32 +93,8 @@
 <h1>Предоставляем услуги юриста в Туле</h1>
 <div style="background-image: url({{ url_for('static', filename='images/main.png') }}); height: 550px; background-size: 100% 100%;padding-top: 14px">
     <h2 class="h2_h">Запись на консультацию</h2>
+    <p style="width: 300px; margin-left: 60px;text-align: center; font-size: 22px; font-weight: 400">производиться после прохождения процедуры регистрации и авторизации и доступна личном кабинете клиента</p>
 
-    <div class="form_zayavk">
-
-        {% if data.zap!=''%}
-         <p style="color: green; text-align: center; padding: 20px;font-size: 22px">{{data.zap}}</p>
-        {% endif %}
-         {% if data.zap_error!=''%}
-         <p style="color: red; text-align: center; padding: 20px;font-size: 22px">{{data.zap_error}}</p>
-        {% endif %}
-
-        {% if data.error_auth!='' %}
-        <p style="color: red; text-align: center; padding: 20px;font-size: 22px">{{data.error_auth}}</p>
-        {% endif %}
-        <form method="POST" action="/zap">
-            <!--<div class="item_d">
-
-                <div>ФИО:</div>
-                <div ><input type="text" name="fio" placeholder="ФИО" required> </div>
-            </div>-->
-             <div class="item_d">
-                <div style="width: 200px">Дата и время:</div>
-                <div><input type="datetime-local" name="datetime" required> </div>
-            </div>
-            <div class="contact-submit"><input type="submit" value="Записаться"> </div>
-        </form>
-    </div>
 </div>
 
 
