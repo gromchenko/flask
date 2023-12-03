@@ -21,7 +21,7 @@
             <a href="/">Главная</a>
         </li>
          <li>
-            <a href="/about">Об юристе</a>
+            <a href="/about">Наша команда</a>
         </li>
          <li>
             <a href="/sevices">Услуги</a>
@@ -40,9 +40,7 @@
             <a href="/auth">Авторизация</a>
         </li>
         {% endif %}
-        <li>
-            <a href="/admin">Вход для админа</a>
-        </li>
+
         {% if 'user' in session %}
          <li>
             <a href="/panel">Личный кабинет</a>
@@ -51,6 +49,9 @@
             <a href="/logoutuser">Выход</a>
         </li>
         {% endif %}
+          <li>
+            <a href="/admin">Вход для админа</a>
+        </li>
     </ul>
 </nav>
 <main class="content">

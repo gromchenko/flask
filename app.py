@@ -7,7 +7,7 @@ app = Flask(__name__)
 app.secret_key = 'BAD_SECRET_KEY'
 
 def get_db_connection():
- conn = sqlite3.connect('visitka.db')
+ conn = sqlite3.connect('urist.db')
 
  cursor = conn.cursor()
 
@@ -105,8 +105,17 @@ def auth():
 @app.route('/panel', methods=('GET', 'POST'))
 def panel():
  if 'user' in session:
-  login = session['user']
+
   conn = get_db_connection()
+  login = session['user']
+  if request.method == 'POST':
+   login_1 = request.form['login']
+   email = request.form['email']
+   phone = request.form['phone']
+   fio = request.form['fio']
+   cursor = conn.cursor()
+   cursor.execute('update users set login=?,email=?,phone=?,fio=? where login=?', (login_1, email, phone, fio,login))
+   conn.commit()
   cursor = conn.cursor()
   suser = cursor.execute('select * from users where login=?', (login,)).fetchone()
   conn.commit()
@@ -114,7 +123,6 @@ def panel():
   conn.commit()
   cons = cursor.execute('select * from zap where fio=?', (login,)).fetchall()
   #cons = cursor.execute('select * from zap').fetchall()
-  print(cons)
   conn.commit()
   data = dict(fio=suser[1],login=suser[2], email=suser[4],phone=suser[5], cons=cons, datetimes=datetimes)
   return render_template('panel.html', data=data)
@@ -297,14 +305,15 @@ def clearusers():
 
 @app.route('/datetimezap/<id>', methods=('POST', 'GET'))
 def datetimezap(id):
- if 'login' in session:
+ if 'user' in session:
      conn = get_db_connection()
      cursor = conn.cursor()
+     print(id)
      cursor.execute('update freedatetime set status = 1 where id = ?', (int(id),))
      conn.commit()
      datetime = cursor.execute('select * from freedatetime where id=?', (id,)).fetchone()
      conn.commit()
-
+     print(datetime)
      cursor.execute('insert into zap (fio, datetime) values (?,?)',
                     (session['user'], datetime[1]))
      conn.commit()
