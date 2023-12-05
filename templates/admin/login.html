@@ -21,12 +21,15 @@
              <th>
                 Дата и время назначенной консультации
              </th>
+            <th>
 
+            </th>
         </tr>
         {% for z in data.zap %}
             <tr>
                 <td align="center" style="padding: 8px"><a href="userdetail/{{z[3]}}">{{z[1]}}</a></td>
                  <td align="center" style="padding: 8px">{{z[2].replace('T', ' ')[:10]}} {{z[2].replace('T', ' ')[10:]}}</td>
+                <td align="center"><a href="/deletezap/{{z[0]}}">Удалить</a> </td>
             </tr>
         {% endfor %}
     </table></div>
@@ -54,6 +57,7 @@
             <th>
                 Вопрос
             </th>
+            <th></th>
         </tr>
         {% for z in data.zayavki %}
             <tr>
@@ -62,7 +66,7 @@
                  <td style="padding: 8px">{{z[3]}}</td>
                  <td style="padding: 8px">{{z[4]}}</td>
                  <td style="padding: 8px">{{z[5]}}</td>
-
+                <td align="center"><a href="/deletevop/{{z[0]}}">Удалить</a> </td>
             </tr>
         {% endfor %}
     </table>
@@ -91,6 +95,7 @@
             <th>
                 Телефон
             </th>
+            <th></th>
         </tr>
         {% for z in data.users %}
             <tr>
@@ -99,7 +104,7 @@
                  <td style="padding: 8px">{{z[3]}}</td>
                  <td style="padding: 8px">{{z[4]}}</td>
                  <td style="padding: 8px">{{z[5]}}</td>
-
+ <td align="center"><a href="/deleteuser/{{z[0]}}">Удалить</a> </td>
             </tr>
         {% endfor %}
     </table>

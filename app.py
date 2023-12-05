@@ -196,6 +196,7 @@ def admin():
  conn.commit()
  users = cursor.execute('select * from users').fetchall()
  conn.commit()
+ print(users)
  users_fio = []
  for i in zap:
   fio = cursor.execute('select * from users where login=?', (i[1], )).fetchone()
@@ -216,7 +217,7 @@ def admin():
    session['login'] = login
 
 
-  return render_template('admin/login.html', data={'zayavki':zayavki, 'zap':users_fio, 'user':users})
+  return render_template('admin/login.html', data={'zayavki':zayavki, 'zap':users_fio, 'users':users})
  else:
   return render_template('admin/login.html', data={'zayavki': zayavki, 'zap':users_fio, 'users':users})
 
@@ -319,3 +320,31 @@ def datetimezap(id):
      conn.commit()
  return redirect('/panel')
 
+
+@app.route('/deletezap/<id>', methods=('POST', 'GET'))
+def deletezap(id):
+ if 'login' in session:
+     conn = get_db_connection()
+     cursor = conn.cursor()
+     cursor.execute('delete from zap where id = ?', (id,))
+     conn.commit()
+ return redirect('/admin')
+
+@app.route('/deletevop/<id>', methods=('POST', 'GET'))
+def deletevop(id):
+ if 'login' in session:
+     conn = get_db_connection()
+     cursor = conn.cursor()
+     cursor.execute('delete from zayavki where id = ?', (id,))
+     conn.commit()
+ return redirect('/admin')
+
+
+@app.route('/deleteuser/<id>', methods=('POST', 'GET'))
+def deleteuser(id):
+ if 'login' in session:
+     conn = get_db_connection()
+     cursor = conn.cursor()
+     cursor.execute('delete from users where id = ?', (id,))
+     conn.commit()
+ return redirect('/admin')
