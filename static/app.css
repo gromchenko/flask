@@ -341,3 +341,95 @@ item_d div:last-child{
     list-style: none;
     font-weight: bold
 }
+.btn_spinf{
+    display: none;
+    position: fixed;
+    right: 10px;
+    bottom: 0px;
+    padding: 15px;
+    background: #fff;
+    color: #000;
+    border: 1px solid #000;
+    border-radius: 30px 30px 0px 0px;
+}
+.btn_urist{
+    display: none;
+    position: fixed;
+    left: 10px;
+    bottom: 0px;
+    padding: 15px;
+    background: #fff;
+    color: #000;
+    border: 1px solid #000;
+    border-radius: 30px 30px 0px 0px;
+}
+.close, .close_1{
+    text-align: right;
+    display: none;
+    font-size: 33px;
+    color: #000;
+}
+
+@media (max-width: 1800px){
+    .btn_spinf, .btn_urist{
+        display: block;
+    }
+    .listlink{
+        display: none;
+        z-index: 100;
+    }
+    .close{
+        display: block
+    }
+    .cont_form, .header_text{
+        display: none;
+    }
+    .close_1{
+    display: block
+    }
+
+}
+
+@media (max-width: 800px){
+    .header, .menu-main{
+        width: 100%
+    }
+    .header p{
+        font-size: 18px
+    }
+    .content{
+        width: 95%;
+        margin: auto;
+        padding: 10px
+    }
+    .content h1{
+        font-size: 16px
+    }
+    .main_img{
+        height: 354px !important
+    }
+    .main_img p,  .main_img h2{
+        background: rgba(255,255,255,0.6);
+    }
+    .footer{
+        width: 100%
+    }
+    .footer ul{
+        padding: 0
+    }
+    .btn_spinf, .btn_urist{
+        width: 170px;
+        text-align: center
+    }
+    .cont_form, .contact{
+        left: 0;
+        width: 100%
+    }
+    .close_1{
+        text-align: left;
+    }
+    .listlink{
+        width: 100%;
+        right: 0px
+    }
+}
