@@ -348,3 +348,6 @@ def deleteuser(id):
      cursor.execute('delete from users where id = ?', (id,))
      conn.commit()
  return redirect('/admin')
+
+if __name__ == '__main__':
+ app.run(debug=True)
