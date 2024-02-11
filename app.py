@@ -8,45 +8,40 @@ app.secret_key = 'BAD_SECRET_KEY'
 
 def get_db_connection():
  conn = sqlite3.connect('urist.db')
-
- cursor = conn.cursor()
-
-# cursor.execute('insert into admin (login, password) values ("admin", "admin"')
- conn.commit()
+ #conn.commit()
  return conn
 
 @app.route('/', methods=('GET', 'POST'))
 def index():
- zaps = ''
+ #zaps = ''
  suc = ''
- zap = ''
- zap_error = ''
- error_auth = ''
- if 'zap' in session:
-  zap = session['zap']
-  del session['zap']
- if 'error_auth' in session:
-  error_auth = session['error_auth']
-  del session['error_auth']
- if 'zap_error' in session:
-  zap_error = session['zap_error']
-  del session['zap_error']
+ #zap = ''
+ #zap_error = ''
+ #error_auth = ''
+ #if 'zap' in session:
+  #zap = session['zap']
+  #del session['zap']
+ #if 'error_auth' in session:
+ # error_auth = session['error_auth']
+  #del session['error_auth']
+ #if 'zap_error' in session:
+ # zap_error = session['zap_error']
+ # del session['zap_error']
  if request.method == 'POST':
   fio = request.form['name']
   phone = request.form['phone']
   email = request.form['email']
   service = request.form['service']
   message = request.form['message']
-  print(fio, phone, email, service, message)
   conn = get_db_connection()
   cursor = conn.cursor()
 
   cursor.execute('insert into zayavki (fio, email, phone, service, message) values (?,?,?,?,?)',
                  (fio, email, phone, service, message))
-  conn.commit()
+  conn.commit()  # НАЧАТЬ 6 ФЕВРАЛЯ.
   conn.close()
   suc = 'Заявка успешно отправлена'
- return render_template('index.html', data={'suc':suc, 'zap':zap, 'zaps': zaps, 'zap_error':zap_error, 'error_auth': error_auth})
+ return render_template('index.html', data={'suc':suc})
 
 @app.route('/about', methods=['GET'])
 def about():
@@ -58,12 +53,7 @@ def contacts():
 
 @app.route('/sevices', methods=['GET'])
 def sevices():
- conn = get_db_connection()
- cursor = conn.cursor()
- services = cursor.execute('SELECT * FROM services').fetchall()
- conn.commit()
- conn.close()
- return render_template('services.html', services=services)
+ return render_template('services.html')
 
 @app.route('/reg', methods=('GET', 'POST'))
 def reg():
@@ -78,8 +68,8 @@ def reg():
   cursor.execute('insert into users (fio, login, password, email, phone) values (?,?,?,?,?)', (fio, login, password, email, phone))
   conn.commit()
   conn.close()
-  data = dict(suc='Вы успешно зарегистрированы!')
-  return render_template('reg.html', data=data)
+  suc = 'Вы успешно зарегистрировались!'
+  return render_template('reg.html', data={'suc': suc})
  return render_template('reg.html', data={'suc':''})
 
 @app.route('/auth', methods=('GET', 'POST'))
@@ -91,15 +81,15 @@ def auth():
   conn = get_db_connection()
   cursor = conn.cursor()
   suser = cursor.execute('select * from users where login=? and password=?', (login, password)).fetchone()
+  # fetchone() это [(1, 'user1', 'login')][(1, 'user1', '12345')]
   conn.commit()
-  if not suser == None:
+  if suser:
    session['user'] = suser[2]
    suc = 'Вы успешно авторизировались!'
    return redirect('panel')
   else:
    suc = 'Ошибка авторизации'''
- data = dict(suc=suc)
- return render_template('auth.html', data=data)
+ return render_template('auth.html', suc=suc)
 
 
 @app.route('/panel', methods=('GET', 'POST'))
@@ -107,15 +97,15 @@ def panel():
  if 'user' in session:
 
   conn = get_db_connection()
+
   login = session['user']
   if request.method == 'POST':
-   login_1 = request.form['login']
    email = request.form['email']
    phone = request.form['phone']
    fio = request.form['fio']
    cursor = conn.cursor()
-   cursor.execute('update users set login=?,email=?,phone=?,fio=? where login=?', (login_1, email, phone, fio,login))
-   conn.commit()
+   cursor.execute('update users set email=?,phone=?,fio=? where login=?', ( email, phone, fio,login))
+   conn.commit() +++++ОТСЮДА НАЧАТЬ 11 ФЕВРАЛЯ
   cursor = conn.cursor()
   suser = cursor.execute('select * from users where login=?', (login,)).fetchone()
   conn.commit()
