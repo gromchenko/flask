@@ -105,20 +105,24 @@ def panel():
    fio = request.form['fio']
    cursor = conn.cursor()
    cursor.execute('update users set email=?,phone=?,fio=? where login=?', ( email, phone, fio,login))
-   conn.commit() +++++ОТСЮДА НАЧАТЬ 11 ФЕВРАЛЯ
+   conn.commit()  #+++++ОТСЮДА НАЧАТЬ 11 ФЕВРАЛЯ
   cursor = conn.cursor()
   suser = cursor.execute('select * from users where login=?', (login,)).fetchone()
   conn.commit()
   datetimes = cursor.execute('select * from freedatetime where status=0 order by datetime').fetchall()
   conn.commit()
   cons = cursor.execute('select * from zap where fio=?', (login,)).fetchall()
-  #cons = cursor.execute('select * from zap').fetchall()
   conn.commit()
   data = dict(fio=suser[1],login=suser[2], email=suser[4],phone=suser[5], cons=cons, datetimes=datetimes)
   return render_template('panel.html', data=data)
  else:
   return redirect('auth')
 
+
+'''
+НЕ РАЗОБРАЛИСЬ
+'''
+'''
 @app.route('/zap', methods=('POST', 'GET'))
 def zap():
  if 'user' in session:
@@ -145,7 +149,8 @@ def zap():
  else:
   session['error_auth'] = 'Для того, чтобы записаться, необходимо пройти авторизацию'
  return redirect('/')
-
+'''
+'''
 @app.route('/check', methods=('POST', 'GET'))
 def check():
  fio = request.form['fio']
@@ -168,26 +173,25 @@ def check():
  print(dd)
 
  return render_template('index.html', data={'suc':suc, 'zap':zap, 'zaps': dd})
-
+'''
 @app.route('/logoutadmin', methods=('POST', 'GET'))
 def logoutadmin():
  if 'login' in session:
   del session['login']
  return redirect('/')
+
+
 @app.route('/admin', methods=('POST', 'GET'))
 def admin():
  conn = get_db_connection()
  cursor = conn.cursor()
  zayavki = cursor.execute('select * from zayavki').fetchall()
  conn.commit()
-
  zap = cursor.execute('select * from zap order by id desc').fetchall()
-
  conn.commit()
  users = cursor.execute('select * from users').fetchall()
  conn.commit()
- print(users)
- users_fio = []
+ users_fio = []  #ЗАКОНЧИЛИ ЗДЕСЬ 11 ФЕВРАЛЯ 2024
  for i in zap:
   fio = cursor.execute('select * from users where login=?', (i[1], )).fetchone()
   conn.commit()
@@ -195,21 +199,14 @@ def admin():
    users_fio.append((i[0], i[1], i[2], 0))
   else:
    users_fio.append((i[0], fio[1], i[2], fio[0]))
-
  if request.method == 'POST':
-
   login = request.form['login']
   password = request.form['password']
-  #cursor.execute('insert into admin (login, password) values ("admin", "admin")')
   suser = cursor.execute('select * from admin where login=? and password=?', (login, password)).fetchone()
   conn.commit()
-  if len(suser) > 0:
+  if suser:
    session['login'] = login
-
-
-  return render_template('admin/login.html', data={'zayavki':zayavki, 'zap':users_fio, 'users':users})
- else:
-  return render_template('admin/login.html', data={'zayavki': zayavki, 'zap':users_fio, 'users':users})
+ return render_template('admin/login.html', data={'zayavki':zayavki, 'zap':users_fio, 'users':users})
 
 
 @app.route('/clearzayavki', methods=('POST', 'GET'))
@@ -256,10 +253,8 @@ def deletedatetime():
    id = request.form['id']
    datetime = cursor.execute('select * from freedatetime where id=?', (id,)).fetchone()[1]
    conn.commit()
-
    cursor.execute('delete from freedatetime where id=?', (id,))
    conn.commit()
-
    cursor.execute('delete from zap where datetime=?', (datetime,))
    conn.commit()
  return redirect('freedatetime')
@@ -283,7 +278,7 @@ def userdetail(id):
  cursor = conn.cursor()
  user = cursor.execute('select * from users where id=? ', (id,)).fetchone()
  conn.commit()
- return render_template('admin/dateiluser.html', data={'user': user})
+ return render_template('admin/detail.html', data={'user': user})
 
 @app.route('/clearusers', methods=('POST', 'GET'))
 def clearusers():
@@ -299,12 +294,10 @@ def datetimezap(id):
  if 'user' in session:
      conn = get_db_connection()
      cursor = conn.cursor()
-     print(id)
      cursor.execute('update freedatetime set status = 1 where id = ?', (int(id),))
      conn.commit()
      datetime = cursor.execute('select * from freedatetime where id=?', (id,)).fetchone()
      conn.commit()
-     print(datetime)
      cursor.execute('insert into zap (fio, datetime) values (?,?)',
                     (session['user'], datetime[1]))
      conn.commit()
