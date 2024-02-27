@@ -57,20 +57,24 @@ def sevices():
 
 @app.route('/reg', methods=('GET', 'POST'))
 def reg():
+ suc = ''
  if request.method == 'POST':
   fio = request.form['fio']
   login = request.form['login']
   password = request.form['password']
   email = request.form['email']
   phone = request.form['phone']
-  conn = get_db_connection()
-  cursor = conn.cursor()
-  cursor.execute('insert into users (fio, login, password, email, phone) values (?,?,?,?,?)', (fio, login, password, email, phone))
-  conn.commit()
-  conn.close()
-  suc = 'Вы успешно зарегистрировались!'
-  return render_template('reg.html', data={'suc': suc})
- return render_template('reg.html', data={'suc':''})
+  if login == '' or password == '' or email == '' or phone == '' or fio == '':
+   suc = "Обязательными для заполнения являются поля: Ф.И.О., логин, пароль, телефон"
+  else:
+   conn = get_db_connection()
+   cursor = conn.cursor()
+   cursor.execute('insert into users (fio, login, password, email, phone) values (?,?,?,?,?)', (fio, login, password, email, phone))
+   conn.commit()
+   conn.close()
+   suc = 'Вы успешно зарегистрировались!'
+ return render_template('reg.html', suc=suc)
+
 
 @app.route('/auth', methods=('GET', 'POST'))
 def auth():
@@ -181,7 +185,7 @@ def logoutadmin():
  return redirect('/')
 
 
-@app.route('/admin', methods=('POST', 'GET'))
+@app.route('/admin/login', methods=('POST', 'GET'))
 def admin():
  conn = get_db_connection()
  cursor = conn.cursor()
