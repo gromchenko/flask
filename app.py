@@ -184,7 +184,6 @@ def logoutadmin():
   del session['login']
  return redirect('/')
 
-
 @app.route('/admin/login', methods=('POST', 'GET'))
 def admin():
  conn = get_db_connection()
@@ -192,6 +191,7 @@ def admin():
  zayavki = cursor.execute('select * from zayavki').fetchall()
  conn.commit()
  zap = cursor.execute('select * from zap order by id desc').fetchall()
+
  conn.commit()
  users = cursor.execute('select * from users').fetchall()
  conn.commit()
